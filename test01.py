@@ -31,3 +31,5 @@ print(person[1])
 # person[1] = 45    # 이미있는 값은 변경이 불가능(튜플의 특성)
 name, age, gender = person
 print(gender)
+
+print('Git Hub 추가 내용입니다.')
