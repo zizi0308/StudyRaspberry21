@@ -40,4 +40,13 @@ class naverSearch(object):
 
     # 데이터 처리
     def getPostDate(self, post, jsonResult):
+        title = post['title']
+        desc = ['description']
+        org_link = post['originallink']
+        link = post['link']
+        pDate = datetime.datetime.strptime(post['pubDate'], '%a, %d %d %Y %H:%M:%S +0900')    #문자열로 들어온 값을 datetime으로 파싱
+        p_date = pDate.strftime('%Y-%m-%d %H:%M:%S')
+
+        jsonResult.append({})
         pass
+        return
