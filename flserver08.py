@@ -3,7 +3,6 @@ import RPi.GPIO as GPIO
 import time						
  
 app = Flask(__name__)					# 플라스크 앱 생성
-
 ledPin = 26
 triggerPin = 14
 echoPin = 4
@@ -17,18 +16,14 @@ GPIO.setup(pinPiezo, GPIO.OUT)		    # pinPiezo의 핀모드 설정(출력)
 GPIO.setup(sound, GPIO.OUT)		        # sound의 핀모드 설정(출력)
 GPIO.setup(triggerPin, GPIO.OUT)	    # triggerPin의 핀모드 설정(출력)
 GPIO.setup(echoPin, GPIO.IN)		    # echoPin의 핀모드 설정(입력)
-
 Melody = [262, 294, 330, 349, 392, 440, 494, 523, 523, 494, 440, 392, 349, 330, 294, 262]		# pinPiezo의 소리를 설정하기 위한 배열
 p = GPIO.PWM(ledPin, 255)		    # ledPin 초기화
 Buzz = GPIO.PWM(pinPiezo, 100)		# pinPiezo 초기화
 Alram = GPIO.PWM(sound, 440)		# sound 초기화
-
 p.start(0)				# ledPin 시작
-
 @app.route('/')		    # 웹표현 route()
 def home():			    # home 함수 실행
     return render_template("index.html")	    # index.html을 받아서 페이지를 로드
-
 @app.route('/leddata', methods = ['POST'])      # POST방식을 사용해 주소를 직접입력
 def leddata():
    leddata = request.form['led']		 # 웹에서 데이터를 받기 위한 request.form[]
@@ -45,11 +40,10 @@ def leddata():
       GPIO.cleanup()			        # 리소스 해제
  
    return home()			            # 주소로 다시 리턴시켜줌(안시키면 오류)
-
 @app.route('/ultrasonic', methods = ['POST'])   # POST 방식을 사용한 주소지정
 def ultrasonic():				                # 초음파센서 실행을 위한 함수
    ultrasonic = request.form['sonic']	        # 웹데이터를 받기 위한 request.form[]
-   if ultrasonic == 'on':			            # ultrasonic의 on버튼을 눌렀을 때 
+   if ultrasonic == 'on':			            # ultrasonic의 on버튼을 눌렀을 때
       while True:			                    # 무한반복문 실행
          GPIO.output(triggerPin, GPIO.HIGH)     # 트리거 펄스 송신
          time.sleep(0.00001)		            # 10us동안 트리거 펄스송신
@@ -61,7 +55,7 @@ def ultrasonic():				                # 초음파센서 실행을 위한 함수
 
          rtTotime = stop - start		        # 시간측정
          distance = rtTotime * 34000 / 2	    # 시간을 거리로 변환(왕복이므로 %2)
-         print("distance : %.2f cm" %distance)	# 거리 값 출력
+         print("distance : %.2f cm" % distance)	# 거리 값 출력
          time.sleep(0.3)
          if (distance < 40) and (distance >= 20):		# 후방감지센서 알람조건식1
             Alram.start(50)				        # PWM 시작
@@ -81,7 +75,6 @@ def ultrasonic():				                # 초음파센서 실행을 위한 함수
    else:							        # off버튼 클릭 시
       GPIO.cleanup()					    # 할당된 리소스 해제
    return render_template("index.html")		# 다시 홈으로 리턴
- 
 @app.route('/sound', methods = ['POST'])    # POST 방식을 사용한 주소지정
 def sound():					            # 피아노사운드 실행을 위한 함수
    sound = request.form['piano']            # 웹데이터를 받기 위한 request.form[]
