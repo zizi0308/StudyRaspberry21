@@ -59,7 +59,7 @@ def ultrasonic():				                # 초음파센서 실행을 위한 함수
          while GPIO.input(echoPin) == 1:        # 초음파 수신이 완료될때까지 수신시간 저장
             stop = time.time()
 
-         rtTotime = stop – start		        # 시간측정
+         rtTotime = stop - start		        # 시간측정
          distance = rtTotime * 34000 / 2	    # 시간을 거리로 변환(왕복이므로 %2)
          print("distance : %.2f cm" %distance)	# 거리 값 출력
          time.sleep(0.3)
