@@ -23,7 +23,7 @@ Alram = GPIO.PWM(sound, 440)		# sound 초기화
 p.start(0)				# ledPin 시작
 @app.route('/')		    # 웹표현 route()
 def home():			    # home 함수 실행
-    return render_template("index.html")	    # index.html을 받아서 페이지를 로드
+   return render_template("index.html")	    # index.html을 받아서 페이지를 로드
 @app.route('/leddata', methods = ['POST'])      # POST방식을 사용해 주소를 직접입력
 def leddata():
    leddata = request.form['led']		 # 웹에서 데이터를 받기 위한 request.form[]
