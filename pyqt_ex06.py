@@ -7,7 +7,7 @@ from PyQt5 import QtGui
 
 class ShowVideo(QtCore.QObject):
 
-    flag = 0
+    flag = 0    # start와 canny구분을 위한 플래그
 
     camera = cv2.VideoCapture(0)
 
@@ -22,13 +22,13 @@ class ShowVideo(QtCore.QObject):
 
     @QtCore.pyqtSlot()
     def startVideo(self):
-        global image, ret
+        global image, ret   # 이미지를 읽기위한 전역변수
 
         run_video = True
         while run_video:
             ret, image = self.camera.read()
             color_swapped_image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
+            # 일반 카메라 이미지
             qt_image1 = QtGui.QImage(color_swapped_image.data,
                                     self.width,
                                     self.height,
@@ -36,7 +36,7 @@ class ShowVideo(QtCore.QObject):
                                     QtGui.QImage.Format_RGB888)
             self.VideoSignal1.emit(qt_image1)
 
-
+            # canny를 클릭했을 때 나오는 이미지
             if self.flag:
                 img_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
                 img_canny = cv2.Canny(img_gray, 50, 100)
@@ -54,7 +54,7 @@ class ShowVideo(QtCore.QObject):
             QtCore.QTimer.singleShot(25, loop.quit) #25 ms
             loop.exec_()
 
-            vid.startVideo()
+            vid.startVideo()    # 시작했을때 카메라 켜짐
 
     @QtCore.pyqtSlot()
     def canny(self):
