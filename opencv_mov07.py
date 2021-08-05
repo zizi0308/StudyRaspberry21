@@ -1,3 +1,4 @@
+# motion detecting
 import cv2
 import numpy as np
 import datetime
@@ -7,6 +8,7 @@ from PIL import ImageFont, ImageDraw, Image
 # 영상간의 차이나는 부분 표시 이미지, 차이나는 픽셀갯수 리턴함수
 def get_diff_image(frame_a, frame_b, frame_c, threshold):
     # 3개의 모든 프레임을 회색으로 변환(경계선을 따기위해)
+    # 모든 픽셀에 노이즈가 끼여있기에 프레임 2개로는 정확한 값 측정 어려움, 때문에 프레임 3개 씀
     frame_a_gray = cv2.cvtColor(frame_a, cv2.COLOR_BGR2GRAY)
     frame_b_gray = cv2.cvtColor(frame_b, cv2.COLOR_BGR2GRAY)
     frame_c_gray = cv2.cvtColor(frame_c, cv2.COLOR_BGR2GRAY)
@@ -15,7 +17,7 @@ def get_diff_image(frame_a, frame_b, frame_c, threshold):
     diff_ab = cv2.absdiff(frame_a_gray, frame_b_gray) # 둘다 초기에 찍힌것이기때문에 차이X
     diff_bc = cv2.absdiff(frame_b_gray, frame_c_gray) # 차이날수도 안날수도 있음
 
-    # 영상 차이값(경계 값이 다른 부분)이 40이상이면 값을 흰색으로 바꿔줌
+    # 영상 차이값(경계 값이 다른 부분)이 40이상이면 값을 흰색으로 바꿔줌 >> ret : 변한부분을 표시 0/1
     ret, diff_ab_t = cv2.threshold(diff_ab, threshold, 255, cv2.THRESH_BINARY)  # 흰부분찾기
     ret, diff_bc_t = cv2.threshold(diff_bc, threshold, 255, cv2.THRESH_BINARY)  # 흰부분찾기
 
@@ -45,7 +47,6 @@ is_record = False   # 녹화상태
 threshold = 40  # 영상 차이가 나는 threshold 설정
 diff_max = 10   # 영상 차이가 나는 최대픽셀수
 
-# 최초의 이미지 필요 거기에 선을따서 흑백처리(Aframe) 후 얘를 반전(Bframe)시킴
 # ab의 이미지와 bc의 이미지가 차이나면 그부분이 움직임 감지된 부분 
 ret, frame_a = cap.read()   # 그냥 빈공간을 위해 필요하다고 생각하면 됨
 ret, frame_b = cap.read()
@@ -90,3 +91,4 @@ while True: # 반복문을 통해 웹캠을 지속함
 
 cap.release()    # 웹캠 해제
 cv2.destroyAllWindows()
+
